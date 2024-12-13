@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/manuraj23/node_js-with-Express#readme",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9"
   }
 }
