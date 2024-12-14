@@ -1,18 +1,18 @@
 const { count } = require('console');
-const express=require('express');
+const express = require('express');
 const fs = require('fs');
-let app=express();
+let app = express();
 
 
-let movies = JSON.parse(fs.readFileSync('data/movies.json','utf-8'));
+let movies = JSON.parse(fs.readFileSync('data/movies.json', 'utf-8'));
 
 //Get -api/movies
-app.get('/api/v1/movies',(req,res)=>{
+app.get('/api/v1/movies', (req, res) => {
     res.status(200).json({
-        status:'success',
-        count:movies.length,
-        data:{
-            movies:movies
+        status: 'success',
+        count: movies.length,
+        data: {
+            movies: movies
         }
     });
 });
@@ -24,7 +24,7 @@ app.get('/api/v1/movies/:id/', (req, res) => { //:id is a route parameter and th
     if (!movie) {
         return res.status(404).json({
             status: 'fail',
-            message: 'Movies with id '+id+' not found'
+            message: 'Movies with id ' + id + ' not found'
         });
     }
     res.status(200).json({
@@ -33,7 +33,7 @@ app.get('/api/v1/movies/:id/', (req, res) => { //:id is a route parameter and th
             movie: movie
         }
     });
-}); 
+});
 
 //Post -api/movies
 
@@ -41,19 +41,19 @@ app.get('/api/v1/movies/:id/', (req, res) => { //:id is a route parameter and th
 app.use(express.json());
 
 
-app.post('/api/v1/movies',(req,res)=>{
-    const newId=movies[movies.length-1].id+1;
-    const newMovies=Object.assign({id:newId},req.body);
+app.post('/api/v1/movies', (req, res) => {
+    const newId = movies[movies.length - 1].id + 1;
+    const newMovies = Object.assign({ id: newId }, req.body);
     movies.push(newMovies);
-    fs.writeFile('data/movies.json',JSON.stringify(movies),err=>{ //stringify is used to convert the object into string
+    fs.writeFile('data/movies.json', JSON.stringify(movies), err => { //stringify is used to convert the object into string
         res.status(201).json({
-            status:'success',
-            data:{
-                movies:newMovies
+            status: 'success',
+            data: {
+                movies: newMovies
             }
         });
     });
-}); 
+});
 
 //Using patch to update the data based on id.
 app.patch('/api/v1/movies/:id', (req, res) => {
@@ -82,23 +82,23 @@ app.patch('/api/v1/movies/:id', (req, res) => {
 app.delete('/api/v1/movies/:id', (req, res) => {
     let id = req.params.id * 1;
     let movieToDelete = movies.find(el => el.id === id);
-    const index=movies.indexOf(movieToDelete);
+    const index = movies.indexOf(movieToDelete);
     if (!movieToDelete) {
         return res.status(404).json({
             status: 'fail',
-            message: 'Movies with id '+id+' not found'
+            message: 'Movies with id ' + id + ' not found'
         });
     }
-    movies.splice(index,1); //1 is used to delete only one element. And index is the position of the element to be deleted.
-    fs.writeFile('data/movies.json',JSON.stringify(movies),err=>{
+    movies.splice(index, 1); //1 is used to delete only one element. And index is the position of the element to be deleted.
+    fs.writeFile('data/movies.json', JSON.stringify(movies), err => {
         res.status(204).json({
-            status:'success',
-            data:null
+            status: 'success',
+            data: null
         });
     });
 });
 
-const port=3000;
-app.listen(port,()=>{
+const port = 3000;
+app.listen(port, () => {
     console.log(`App running on port ${port}...`);
 });
