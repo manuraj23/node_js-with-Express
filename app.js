@@ -38,7 +38,7 @@ app.get('/api/v1/movies/:id/', (req, res) => { //:id is a route parameter and th
 //Post -api/movies
 
 //midleware :add data to the request object
-app.use(express.json());
+app.use(express.json()); //This is a middleware that is used to parse the incoming request with JSON payloads.
 
 
 app.post('/api/v1/movies', (req, res) => {
