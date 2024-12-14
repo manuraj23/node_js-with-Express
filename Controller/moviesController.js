@@ -2,6 +2,16 @@ const fs = require('fs');
 let movies = JSON.parse(fs.readFileSync('data/movies.json', 'utf-8'));
 
 // Handlers
+
+exports.validateBody = (req, res, next) => {
+    if (!req.body.name || !req.body.releaseYear || !req.body.duration) {
+        return res.status(400).json({
+            status: 'fail',
+            message: 'Missing name, year, or length'
+        });
+    }
+    next();
+};
 exports.getMoviesHandler=(req, res) =>{
     res.status(200).json({
         status: 'success',
@@ -32,7 +42,9 @@ exports.createMovieHandler = (req, res) => {
     const newMovie = { id: newId, ...req.body };
     movies.push(newMovie);
 
-    fs.writeFile(path.join(__dirname, '../data/movies.json'), JSON.stringify(movies), err => {
+    const filePath = path.join(__dirname, '../data/movies.json');
+
+    fs.writeFile(filePath, JSON.stringify(movies), err => {
         if (err) {
             return res.status(500).json({
                 status: 'fail',
@@ -44,7 +56,7 @@ exports.createMovieHandler = (req, res) => {
             data: { movie: newMovie }
         });
     });
-}
+};
 
 exports.updateMovieHandler = (req, res) => {
     const id = parseInt(req.params.id, 10);
