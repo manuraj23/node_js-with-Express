@@ -5,7 +5,7 @@ const app = require('./10.Creating_Route_Modules');
 console.log(app.get('env'));
 console.log(process.env);
 
-const port = process.env.PORT ;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`App running on port ${port}...`);
 });
